@@ -103,4 +103,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void printKeyHash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.neversitup.datapoints",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                L.d("KeyHash:" + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            L.d("NameNotFoundException : " + e.getLocalizedMessage());
+        } catch (NoSuchAlgorithmException e) {
+            L.d("NoSuchAlgorithmException : " + e.getLocalizedMessage());
+        }
+    }
 }
